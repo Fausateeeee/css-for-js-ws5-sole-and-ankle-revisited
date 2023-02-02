@@ -1,10 +1,13 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { COLORS, WEIGHTS } from '../../constants';
-import Logo from '../Logo';
-import SuperHeader from '../SuperHeader';
-import MobileMenu from '../MobileMenu';
+import { WEIGHTS, BREAKPOINTS } from "../../constants";
+import Logo from "../Logo";
+import Icon from "../Icon";
+import SuperHeader from "../SuperHeader";
+import MobileMenu from "../MobileMenu";
+import UnstyledButton from "../UnstyledButton";
+import VisuallyHidden from "../VisuallyHidden";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -30,6 +33,20 @@ const Header = () => {
           <NavLink href="/collections">Collections</NavLink>
         </Nav>
         <Side />
+        <MobileNav>
+          <UnstyledButton>
+            <Icon color={"var(--color-gray-900)"} id="shopping-bag" />
+            <VisuallyHidden>Cart</VisuallyHidden>
+          </UnstyledButton>
+          <UnstyledButton>
+            <Icon color={"var(--color-gray-900)"} id="search" />
+            <VisuallyHidden>Search</VisuallyHidden>
+          </UnstyledButton>
+          <UnstyledButton onClick={() => setShowMobileMenu(true)}>
+            <Icon color={"var(--color-gray-900)"} id="menu" />
+            <VisuallyHidden>Menu</VisuallyHidden>
+          </UnstyledButton>
+        </MobileNav>
       </MainHeader>
 
       <MobileMenu
@@ -44,14 +61,38 @@ const MainHeader = styled.div`
   display: flex;
   align-items: baseline;
   padding: 18px 32px;
-  height: 72px;
-  border-bottom: 1px solid ${COLORS.gray[300]};
+  border-bottom: 1px solid var(--color-gray-300);
+  @media (max-width: ${BREAKPOINTS.tablet}) {
+    align-items: center;
+    border-top: 4px solid var(--color-gray-900);
+  }
+  @media (max-width: ${BREAKPOINTS.phone}) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  overflow: auto;
 `;
 
 const Nav = styled.nav`
+  @media (max-width: ${BREAKPOINTS.tablet}) {
+    display: none;
+  }
   display: flex;
-  gap: 48px;
+  gap: clamp(1rem, 8vw - 4rem, 3rem);
   margin: 0px 48px;
+`;
+
+const MobileNav = styled.nav`
+  display: none;
+
+  @media (max-width: ${BREAKPOINTS.tablet}) {
+    display: flex;
+    gap: 24px;
+  }
+  @media (max-width: ${BREAKPOINTS.phone}) {
+    gap: 16px;
+  }
 `;
 
 const Side = styled.div`
@@ -62,11 +103,12 @@ const NavLink = styled.a`
   font-size: 1.125rem;
   text-transform: uppercase;
   text-decoration: none;
-  color: ${COLORS.gray[900]};
+  color: var(--color-gray-900);
   font-weight: ${WEIGHTS.medium};
+  min-width: fit-content;
 
   &:first-of-type {
-    color: ${COLORS.secondary};
+    color: var(--color-secondary);
   }
 `;
 
